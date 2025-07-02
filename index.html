@@ -151,7 +151,7 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   const urlType = urlParams.get("type"); // buy или sell
-  const urlRate = parseFloat(urlParams.get("rate")); // Курс, переданный из бота
+  const urlRate = parseFloat(urlParams.get("rate")); // курс из бота
 
   let currentOperation = urlType || 'buy';
   let currentRate = urlRate || 0;
@@ -160,9 +160,9 @@
     try {
       const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=rub');
       const data = await response.json();
-      const coingeckoRate = data.tether.rub;
-      document.getElementById('buy-rate').textContent = `🟢 Купить: ${(coingeckoRate + 1).toFixed(2)}₽`;
-      document.getElementById('sell-rate').textContent = `🔴 Продать: ${coingeckoRate.toFixed(2)}₽`;
+      currentRate = data.tether.rub;
+      document.getElementById('buy-rate').textContent = `🟢 Купить: ${(currentRate + 0.32).toFixed(2)}₽`;
+      document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.63).toFixed(2)}₽`;
     } catch (error) {
       console.error("Ошибка:", error);
       document.getElementById('buy-rate').textContent = "Ошибка загрузки";
@@ -177,7 +177,7 @@
       currentOperation = 'buy';
       document.getElementById('form-title').textContent = '🟢 ПОКУПКА USDT';
       document.getElementById('form-type').textContent = 'ПОКУПКА';
-      document.getElementById('form-rate').textContent = (currentRate + 1).toFixed(2) + '₽';
+      document.getElementById('form-rate').textContent = (currentRate + 0.32).toFixed(2) + '₽';
       document.getElementById('main-screen').style.display = 'none';
       document.getElementById('form-screen').style.display = 'block';
     });
@@ -186,7 +186,7 @@
       currentOperation = 'sell';
       document.getElementById('form-title').textContent = '🔴 ПРОДАЖА USDT';
       document.getElementById('form-type').textContent = 'ПРОДАЖА';
-      document.getElementById('form-rate').textContent = currentRate.toFixed(2) + '₽';
+      document.getElementById('form-rate').textContent = (currentRate - 0.63).toFixed(2) + '₽';
       document.getElementById('main-screen').style.display = 'none';
       document.getElementById('form-screen').style.display = 'block';
     });
@@ -209,29 +209,4 @@
         return;
       }
 
-      const effectiveRate = currentOperation === 'buy' ? currentRate + 1 : currentRate;
-
-      const data = {
-        type: currentOperation,
-        rate: effectiveRate,
-        amount,
-        name,
-        wallet,
-        phone
-      };
-
-      tg.sendData(JSON.stringify(data));
-      tg.close();
-    });
-
-    document.getElementById('aboutBtn').addEventListener('click', () => {
-      tg.openTelegramLink('https://t.me/MoscaSupportBot?start=about');
-    });
-
-    document.getElementById('contactsBtn').addEventListener('click', () => {
-      tg.openTelegramLink('https://t.me/MoscaSupportBot?start=contacts');
-    });
-  });
-</script>
-</body>
-</html>
+      const effectiveRate = currentOperation === 'buy' ? currentRate + 0.29 : currentRate - 0.66
