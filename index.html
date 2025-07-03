@@ -169,8 +169,8 @@
           const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=rub');
           const data = await response.json();
           currentRate = data.tether.rub;
-          document.getElementById('buy-rate').textContent = `🟢 Купить: ${(currentRate + 0.51).toFixed(2)}₽`;
-          document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.44).toFixed(2)}₽`;
+          document.getElementById('buy-rate').textContent = `🟢 Купить: ${(currentRate + 0.41).toFixed(2)}₽`;
+          document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.54).toFixed(2)}₽`;
         } catch (error) {
           document.getElementById('buy-rate').textContent = "Ошибка загрузки";
           document.getElementById('sell-rate').textContent = "-";
@@ -185,7 +185,7 @@
         currentOperation = 'buy';
         document.getElementById('form-title').textContent = '🟢 ПОКУПКА USDT';
         document.getElementById('form-type').textContent = 'ПОКУПКА';
-        document.getElementById('form-rate').textContent = (currentRate + 0.51).toFixed(2) + '₽';
+        document.getElementById('form-rate').textContent = (currentRate + 0.41).toFixed(2) + '₽';
         document.getElementById('main-screen').style.display = 'none';
         document.getElementById('form-screen').style.display = 'block';
       });
@@ -194,7 +194,7 @@
         currentOperation = 'sell';
         document.getElementById('form-title').textContent = '🔴 ПРОДАЖА USDT';
         document.getElementById('form-type').textContent = 'ПРОДАЖА';
-        document.getElementById('form-rate').textContent = (currentRate - 0.44).toFixed(2) + '₽';
+        document.getElementById('form-rate').textContent = (currentRate - 0.54).toFixed(2) + '₽';
         document.getElementById('main-screen').style.display = 'none';
         document.getElementById('form-screen').style.display = 'block';
       });
@@ -217,7 +217,7 @@
           return;
         }
 
-        const effectiveRate = currentOperation === 'buy' ? currentRate + 0.51 : currentRate - 0.44;
+        const effectiveRate = currentOperation === 'buy' ? currentRate + 0.41 : currentRate - 0.54;
 
         const orderData = {
           type: currentOperation,
