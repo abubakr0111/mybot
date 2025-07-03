@@ -170,7 +170,7 @@
           const data = await response.json();
           currentRate = data.tether.rub;
           document.getElementById('buy-rate').textContent = `🟢 Купить: ${(currentRate + 0.48).toFixed(2)}₽`;
-          document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.52).toFixed(2)}₽`;
+          document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.57).toFixed(2)}₽`;
         } catch (error) {
           document.getElementById('buy-rate').textContent = "Ошибка загрузки";
           document.getElementById('sell-rate').textContent = "-";
@@ -194,7 +194,7 @@
         currentOperation = 'sell';
         document.getElementById('form-title').textContent = '🔴 ПРОДАЖА USDT';
         document.getElementById('form-type').textContent = 'ПРОДАЖА';
-        document.getElementById('form-rate').textContent = (currentRate - 0.52).toFixed(2) + '₽';
+        document.getElementById('form-rate').textContent = (currentRate - 0.57).toFixed(2) + '₽';
         document.getElementById('main-screen').style.display = 'none';
         document.getElementById('form-screen').style.display = 'block';
       });
@@ -217,7 +217,7 @@
           return;
         }
 
-        const effectiveRate = currentOperation === 'buy' ? currentRate + 0.48 : currentRate - 0.52;
+        const effectiveRate = currentOperation === 'buy' ? currentRate + 0.48 : currentRate - 0.57;
 
         const orderData = {
           type: currentOperation,
