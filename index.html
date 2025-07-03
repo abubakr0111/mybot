@@ -224,8 +224,8 @@
           phone
         };
 
-        console.log('Отправка заявки:', orderData);
-        alert('Заявка отправлена! Спасибо.');
+        tg.sendData(JSON.stringify(orderData));
+  
 
         document.getElementById('amount').value = '';
         document.getElementById('name').value = '';
