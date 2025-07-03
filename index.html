@@ -1,222 +1,248 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>4 Exchange</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #152840;
-      --secondary: #3a7bd5;
-      --buy: #2ecc71;
-      --sell: #e74c3c;
-      --light: #f4f6f8;
-      --dark: #0f1c2f;
-      --silver: #8e9eab;
-    }
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, var(--dark), #1c2a44);
-      color: #f1f1f1;
-      margin: 0;
-      padding: 0;
-      min-height: 100vh;
-    }
-    .container {
-      max-width: 480px;
-      margin: 0 auto;
-      padding: 20px;
-      width: 100%;
-    }
-    .header {
-      background: linear-gradient(to right, var(--primary), var(--secondary));
-      color: white;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
-    }
-    h1 { margin: 0; font-size: 1.6rem; }
-    .card {
-      background: #1f2d40;
-      border-radius: 16px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .rate-display {
-      text-align: center;
-      margin: 10px 0;
-    }
-    .rate-value {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: var(--silver);
-    }
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 10px 0;
-      transition: all 0.2s ease-in-out;
-    }
-    .btn-buy { background: var(--buy); color: white; }
-    .btn-sell { background: var(--sell); color: white; }
-    .btn-nav {
-      background: transparent;
-      color: var(--silver);
-      border: 1px solid var(--silver);
-    }
-    .form-group { margin-bottom: 15px; }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #3a4a5d;
-      background-color: #121e2e;
-      color: #f1f1f1;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    .refresh-btn {
-      background: none;
-      border: none;
-      color: var(--secondary);
-      cursor: pointer;
-      margin-top: 5px;
-      font-size: 0.9rem;
-    }
-    input::placeholder { color: #aaa; }
-  </style>
-</head>
-<body>
-<div id="main-screen">
-  <div class="header">
-    <h1>4 EXCHANGE</h1>
-  </div>
-  <div class="container">
-    <div class="card">
-      <div class="rate-display">
-        <div>Актуальный курс:</div>
-        <div class="rate-value" id="buy-rate">Загрузка...</div>
-        <div class="rate-value" id="sell-rate">-</div>
-        <button class="refresh-btn" id="refresh-rate">⟳ Обновить курс</button>
-      </div>
-    </div>
-    <button id="buyBtn" class="btn btn-buy">🟢 Купить USDT</button>
-    <button id="sellBtn" class="btn btn-sell">🔴 Продать USDT</button>
-    <button id="aboutBtn" class="btn btn-nav">ℹ️ О нас</button>
-    <button id="contactsBtn" class="btn btn-nav">📞 Контакты</button>
-  </div>
-</div>
+<!DOCTYPE html> 
+<html lang="ru">    
+  <head>    
+  <meta charset="UTF-8" />    
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>    
+  <title>4 Exchange</title>    
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>    
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">    
+  <style>    
+    :root {    
+      --primary: #152840;    
+      --secondary: #3a7bd5;    
+      --buy: #2ecc71;    
+      --sell: #e74c3c;    
+      --light: #f4f6f8;    
+      --dark: #0f1c2f;    
+      --silver: #8e9eab;    
+    }  * {    
+  box-sizing: border-box;    
+}    body {
+font-family: 'Inter', sans-serif;
+background: linear-gradient(180deg, var(--dark), #1c2a44);
+color: #f1f1f1;
+margin: 0;
+padding: 0;
+min-height: 100vh;
+}
 
-<div id="form-screen" style="display:none;">
-  <div class="header">
-    <h1 id="form-title">ОФОРМЛЕНИЕ ЗАЯВКИ</h1>
-  </div>
-  <div class="container">
-    <div class="card">
-      <div class="form-group">
-        <label for="amount">Сумма (RUB)</label>
-        <input type="number" id="amount" placeholder="1000" required />
-      </div>
-      <div class="form-group">
-        <label for="name">Полное ФИО</label>
-        <input type="text" id="name" placeholder="Иванов Иван Иванович" required />
-      </div>
-      <div class="form-group">
-        <label for="wallet">Кошелек USDT (TRC20)</label>
-        <input type="text" id="wallet" placeholder="Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required />
-      </div>
-      <div class="form-group">
-        <label for="phone">Телефон</label>
-        <input type="tel" id="phone" placeholder="+79991234567" required />
-      </div>
-      <p>Тип операции: <span id="form-type">-</span></p>
-      <p>Курс: <span id="form-rate">-</span></p>
-      <button id="submitBtn" class="btn btn-buy">✅ Подтвердить</button>
-      <button id="backBtn" class="btn btn-nav">← Назад</button>
-    </div>
-  </div>
-</div>
+.container {
+max-width: 480px;
+margin: 0 auto;
+padding: 20px;
+width: 100%;
+}
 
-<script>
-  const tg = window.Telegram.WebApp;
-  tg.expand();
+.header {
+background: linear-gradient(to right, var(--primary), var(--secondary));
+color: white;
+padding: 20px;
+text-align: center;
+box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
 
-  let currentOperation = 'buy';
-  let currentRate = 0;
+h1 { margin: 0; font-size: 1.6rem; }
 
-  async function fetchRate() {
-    try {
-      const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=rub');
-      const data = await response.json();
-      currentRate = data.tether.rub;
-      document.getElementById('buy-rate').textContent = `🟢 Купить: ${(currentRate + 0.48).toFixed(2)}₽`;
-      document.getElementById('sell-rate').textContent = `🔴 Продать: ${(currentRate - 0.47).toFixed(2)}₽`;
-    } catch (error) {
-      document.getElementById('buy-rate').textContent = "Ошибка загрузки";
-      document.getElementById('sell-rate').textContent = "";
-    }
-  }
+.card {
+background: #1f2d40;
+border-radius: 16px;
+padding: 20px;
+margin: 20px 0;
+box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+border: 1px solid rgba(255,255,255,0.05);
+}
 
-  document.addEventListener('DOMContentLoaded', () => {
-    fetchRate();
+.rate-display {
+text-align: center;
+margin: 10px 0;
+}
 
-    document.getElementById('buyBtn').addEventListener('click', () => {
-      currentOperation = 'buy';
-      document.getElementById('form-title').textContent = '🟢 ПОКУПКА USDT';
-      document.getElementById('form-type').textContent = 'ПОКУПКА';
-      document.getElementById('form-rate').textContent = (currentRate + 0.48).toFixed(2) + '₽';
-      document.getElementById('main-screen').style.display = 'none';
-      document.getElementById('form-screen').style.display = 'block';
-    });
+.rate-value {
+font-size: 1.3rem;
+font-weight: bold;
+color: var(--silver);
+}
 
-    document.getElementById('sellBtn').addEventListener('click', () => {
-      currentOperation = 'sell';
-      document.getElementById('form-title').textContent = '🔴 ПРОДАЖА USDT';
-      document.getElementById('form-type').textContent = 'ПРОДАЖА';
-      document.getElementById('form-rate').textContent = (currentRate - 0.47).toFixed(2) + '₽';
-      document.getElementById('main-screen').style.display = 'none';
-      document.getElementById('form-screen').style.display = 'block';
-    });
+.btn {
+width: 100%;
+padding: 14px;
+border: none;
+border-radius: 12px;
+font-size: 16px;
+font-weight: 600;
+cursor: pointer;
+margin: 10px 0;
+transition: all 0.2s ease-in-out;
+}
 
-    document.getElementById('refresh-rate').addEventListener('click', fetchRate);
+.btn-buy { background: var(--buy); color: white; }
+.btn-sell { background: var(--sell); color: white; }
+.btn-nav {
+background: transparent;
+color: var(--silver);
+border: 1px solid var(--silver);
+}
 
-    document.getElementById('backBtn').addEventListener('click', () => {
-      document.getElementById('form-screen').style.display = 'none';
-      document.getElementById('main-screen').style.display = 'block';
-    });
+.form-group { margin-bottom: 15px; }
 
-    document.getElementById('submitBtn').addEventListener('click', () => {
-      const amount = document.getElementById('amount').value;
-      const name = document.getElementById('name').value;
-      const wallet = document.getElementById('wallet').value;
-      const phone = document.getElementById('phone').value;
+label {
+display: block;
+margin-bottom: 5px;
+font-weight: 500;
+}
 
-      if (!amount || !name || !wallet || !phone) {
-        alert("Заполните все поля!");
-        return;
-      }
+input {
+width: 100%;
+padding: 12px;
+border: 1px solid #3a4a5d;
+background-color: #121e2e;
+color: #f1f1f1;
+border-radius: 8px;
+font-size: 16px;
+}
 
-      const effectiveRate = currentOperation === 'buy' ? currentRate + 0.48 : currentRate - 0.47;
+.refresh-btn {
+background: none;
+border: none;
+color: var(--secondary);
+cursor: pointer;
+margin-top: 5px;
+font-size: 0.9rem;
+}
 
-      const data = {
-        type: currentOperation,
-        rate: effectiveRate.toFixed(2),
-        amount,
-        name,
-        wallet,
+input::placeholder { color: #aaa; }
+
+  </style>    
+</head>    
+<body>    
+<div id="main-screen">    
+  <div class="header">    
+    <h1>4 EXCHANGE</h1>    
+  </div>    
+  <div class="container">    
+    <div class="card">    
+      <div class="rate-display">    
+        <div>Актуальный курс:</div>    
+        <div class="rate-value" id="buy-rate">Загрузка...</div>    
+        <div class="rate-value" id="sell-rate">-</div>    
+        <button class="refresh-btn" id="refresh-rate">⟳ Обновить курс</button>    
+      </div>    
+    </div>    
+    <button id="buyBtn" class="btn btn-buy">🟢 Купить USDT</button>    
+    <button id="sellBtn" class="btn btn-sell">🔴 Продать USDT</button>    
+    <button id="aboutBtn" class="btn btn-nav">ℹ️ О нас</button>    
+    <button id="contactsBtn" class="btn btn-nav">📞 Контакты</button>    
+  </div>    
+</div>  <div id="form-screen" style="display:none;">    
+  <div class="header">    
+    <h1 id="form-title">ОФОРМЛЕНИЕ ЗАЯВКИ</h1>    
+  </div>    
+  <div class="container">    
+    <div class="card">    
+      <div class="form-group">    
+        <label for="amount">Сумма (RUB)</label>    
+        <input type="number" id="amount" placeholder="1000" required />    
+      </div>    
+      <div class="form-group">    
+        <label for="name">Полное ФИО</label>    
+        <input type="text" id="name" placeholder="Иванов Иван Иванович" required />    
+      </div>    
+      <div class="form-group">    
+        <label for="wallet">Кошелек USDT (TRC20)</label>    
+        <input type="text" id="wallet" placeholder="Txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" required />    
+      </div>    
+      <div class="form-group">    
+        <label for="phone">Телефон</label>    
+        <input type="tel" id="phone" placeholder="+79991234567" required />    
+      </div>    
+      <p>Тип операции: <span id="form-type">-</span></p>    
+      <p>Курс: <span id="form-rate">-</span></p>    
+      <button id="submitBtn" class="btn btn-buy">✅ Подтвердить</button>    
+      <button id="backBtn" class="btn btn-nav">← Назад</button>    
+    </div>    
+  </div>    
+</div>  <script>    
+  const tg = window.Telegram.WebApp;    
+  tg.expand();    let currentOperation = 'buy';
+let currentRate = 0;
+
+async function fetchRate() {
+try {
+const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=rub');
+const data = await response.json();
+currentRate = data.tether.rub;
+document.getElementById('buy-rate').textContent = 🟢 Купить: ${(currentRate + 0.18).toFixed(2)}₽;
+document.getElementById('sell-rate').textContent = 🔴 Продать: ${(currentRate - 0.77).toFixed(2)}₽;
+} catch (error) {
+document.getElementById('buy-rate').textContent = "Ошибка загрузки";
+document.getElementById('sell-rate').textContent = "";
+}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+fetchRate();
+
+document.getElementById('buyBtn').addEventListener('click', () => {    
+  currentOperation = 'buy';    
+  document.getElementById('form-title').textContent = '🟢 ПОКУПКА USDT';    
+  document.getElementById('form-type').textContent = 'ПОКУПКА';    
+  document.getElementById('form-rate').textContent = (currentRate + 0.18).toFixed(2) + '₽';    
+  document.getElementById('main-screen').style.display = 'none';    
+  document.getElementById('form-screen').style.display = 'block';    
+});    
+
+document.getElementById('sellBtn').addEventListener('click', () => {    
+  currentOperation = 'sell';    
+  document.getElementById('form-title').textContent = '🔴 ПРОДАЖА USDT';    
+  document.getElementById('form-type').textContent = 'ПРОДАЖА';    
+  document.getElementById('form-rate').textContent = (currentRate - 0.77).toFixed(2) + '₽';    
+  document.getElementById('main-screen').style.display = 'none';    
+  document.getElementById('form-screen').style.display = 'block';    
+});    
+
+document.getElementById('refresh-rate').addEventListener('click', fetchRate);    
+
+document.getElementById('backBtn').addEventListener('click', () => {    
+  document.getElementById('form-screen').style.display = 'none';    
+  document.getElementById('main-screen').style.display = 'block';    
+});    
+
+document.getElementById('submitBtn').addEventListener('click', () => {    
+  const amount = document.getElementById('amount').value;    
+  const name = document.getElementById('name').value;    
+  const wallet = document.getElementById('wallet').value;    
+  const phone = document.getElementById('phone').value;    
+
+  if (!amount || !name || !wallet || !phone) {    
+    alert("Заполните все поля!");    
+    return;    
+  }    
+
+  const effectiveRate = currentOperation === 'buy' ? currentRate + 0.18 : currentRate - 0.77;    
+
+  const data = {    
+    type: currentOperation,    
+    rate: effectiveRate.toFixed(2),    
+    amount,    
+    name,    
+    wallet,    
+    phone    
+  };    
+
+  tg.sendData(JSON.stringify(data));    
+  tg.close();    
+});    
+
+document.getElementById('aboutBtn').addEventListener('click', () => {    
+  tg.openTelegramLink('https://t.me/MoscaSupportBot?start=about');    
+});    
+
+document.getElementById('contactsBtn').addEventListener('click', () => {    
+  tg.openTelegramLink('https://t.me/MoscaSupportBot?start=contacts');    
+});
+
+});
+</script> 
+</body>
+
+</html>
